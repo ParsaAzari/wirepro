@@ -1,0 +1,91 @@
+/* Apple-style circular theme button: sun/moon morph in place. */
+
+/* Round material chip; icon swap is handled by data-theme attr below. */
+.wg-theme {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: var(--wg-color-surface-3);
+  color: var(--wg-color-text-2);
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background var(--wg-motion-fast), color var(--wg-motion-fast), transform var(--wg-motion-press);
+}
+
+.wg-theme:hover { background: var(--wg-color-accent-soft); color: var(--wg-color-accent-text); }
+.wg-theme:active { transform: scale(0.92); }
+
+.wg-theme__icon {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  transition: opacity var(--wg-motion-md), transform var(--wg-motion-spring);
+}
+
+.wg-theme__icon--moon { opacity: 1; transform: rotate(0deg) scale(1); }
+.wg-theme__icon--sun { opacity: 0; transform: rotate(120deg) scale(0.4); }
+
+[data-theme="light"] .wg-theme__icon--moon { opacity: 0; transform: rotate(-120deg) scale(0.4); }
+[data-theme="light"] .wg-theme__icon--sun { opacity: 1; transform: rotate(0deg) scale(1); }
+
+/* ===== Circular reveal (View Transitions + WAAPI) =====
+   MDN/W3C pattern:
+   1) Kill default cross-fade and blend so new wipes over old.
+   2) Extend group/root duration to match REVEAL_MS — otherwise the
+      default ~250ms CSS animation finishes first and tears down the
+      pseudo tree while WAAPI is still expanding (circle "sticks" at
+      the button corner).
+   3) JS (theme.js) animates clip-path on ::view-transition-new(root). */
+
+::view-transition-image-pair(root) {
+  isolation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+  display: block;
+}
+
+/* Hold the VT tree for the full reveal (vars set by theme.js). */
+html.wg-vt-theme::view-transition-group(root),
+html.wg-vt-theme::view-transition-image-pair(root),
+html.wg-vt-theme::view-transition-old(root),
+html.wg-vt-theme::view-transition-new(root) {
+  animation-duration: var(--wg-vt-ms, 600ms);
+}
+
+/* Pin collapsed circle before WAAPI starts (avoids one-frame full flash). */
+html.wg-vt-theme::view-transition-new(root) {
+  clip-path: circle(0px at var(--wg-vt-x, 50%) var(--wg-vt-y, 50%));
+}
+
+/* Default crossfade only when NOT doing a theme reveal. */
+html:not(.wg-vt-theme)::view-transition-old(root) {
+  animation: vt-fade-out 0.15s ease both;
+}
+html:not(.wg-vt-theme)::view-transition-new(root) {
+  animation: vt-fade-in 0.15s ease both;
+}
+
+@keyframes vt-fade-out {
+  to { opacity: 0; }
+}
+@keyframes vt-fade-in {
+  from { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+    clip-path: none !important;
+  }
+}

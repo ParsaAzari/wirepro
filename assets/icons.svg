@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <!-- Minimal outline icon sprite (stroke=currentColor, 1.8px). Reference via <svg class="wg-icon"><use href="assets/icons.svg#i-sun"/></svg> -->
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+  </symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+  </symbol>
+  <symbol id="i-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="6 9 12 15 18 9"/>
+  </symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 6 6 18M6 6l12 12"/>
+  </symbol>
+  <symbol id="i-external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+    <polyline points="15 3 21 3 21 9"/>
+    <line x1="10" y1="14" x2="21" y2="3"/>
+  </symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12"/>
+  </symbol>
+  <symbol id="i-error" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M15 9l-6 6M9 9l6 6"/>
+  </symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>
+    <line x1="12" y1="9" x2="12" y2="13"/>
+    <line x1="12" y1="17" x2="12.01" y2="17"/>
+  </symbol>
+  <symbol id="i-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"/>
+    <line x1="12" y1="17" x2="12.01" y2="17"/>
+  </symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+    <circle cx="12" cy="12" r="3"/>
+  </symbol>
+  <symbol id="i-err-fill" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="10" fill="currentColor"/>
+    <path d="M12 7v6" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="12" cy="16.4" r="1.2" fill="#fff"/>
+  </symbol>
+  <symbol id="i-warn-fill" viewBox="0 0 24 24">
+    <path d="M12 2.7 23 21H1z" fill="currentColor" stroke-linejoin="round"/>
+    <path d="M12 9v5" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="12" cy="17.2" r="1.2" fill="#fff"/>
+  </symbol>
+  <symbol id="i-ok-fill" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="10" fill="currentColor"/>
+    <path d="m8 13 2.7 2.7L16.5 9.5" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/>
+  </symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="9" y="9" width="13" height="13" rx="2"/>
+    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+  </symbol>
+  <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+    <polyline points="7 10 12 15 17 10"/>
+    <line x1="12" y1="15" x2="12" y2="3"/>
+  </symbol>
+  <symbol id="i-file-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+    <polyline points="14 2 14 8 20 8"/>
+    <line x1="12" y1="18" x2="12" y2="12"/>
+    <polyline points="9 15 12 12 15 15"/>
+  </symbol>
+  <symbol id="i-qr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="3" width="7" height="7" rx="1"/>
+    <rect x="14" y="3" width="7" height="7" rx="1"/>
+    <rect x="3" y="14" width="7" height="7" rx="1"/>
+    <path d="M14 14h3v3h-3zM21 14v7M14 21h7"/>
+  </symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="19" y1="12" x2="5" y2="12"/>
+    <polyline points="12 19 5 12 12 5"/>
+  </symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="5" y1="12" x2="19" y2="12"/>
+    <polyline points="12 5 19 12 12 19"/>
+  </symbol>
+  <symbol id="i-rotate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="1 4 1 10 7 10"/>
+    <path d="M3.5 15a9 9 0 1 0 2.1-9.4L1 10"/>
+  </symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <line x1="2" y1="12" x2="22" y2="12"/>
+    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+  </symbol>
+  <symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+  </symbol>
+</svg>

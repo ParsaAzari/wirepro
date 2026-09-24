@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "type": "module",
+  "name": "wirepro",
+  "author": "Parsa Azari",
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ParsaAzari/wirepro.git"
+  },
+  "homepage": "https://github.com/ParsaAzari/wirepro"
+}

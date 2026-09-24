@@ -1,0 +1,119 @@
+/* Design tokens — exact Apple system palette, borderless grouped system. */
+:root,
+/* Light theme (default for new visitors): grouped whites, deepened accents. */
+[data-theme="light"] {
+  --wg-color-accent: #0068D7;
+  --wg-color-accent-strong: #0057B8;
+  --wg-color-accent-ink: #ffffff;
+  --wg-color-accent-text: #0068D7;
+  --wg-color-accent-soft: rgba(0, 122, 255, 0.09);
+  --wg-color-accent-ghost: rgba(0, 122, 255, 0.05);
+  --wg-color-brand: #007AFF;
+  --wg-color-focus: #0068D7;
+  --wg-color-bg: #F2F2F7;
+  --wg-color-surface: #FFFFFF;
+  --wg-color-surface-2: #FFFFFF;
+  --wg-color-surface-3: #E5E5EA;
+  --wg-color-fill: #F2F2F7;
+  --wg-color-text: #000000;
+  --wg-color-text-2: rgba(60, 60, 67, 0.6);
+  --wg-color-text-3: rgba(60, 60, 67, 0.3);
+  --wg-color-border: rgba(60, 60, 67, 0.12);
+  --wg-color-border-strong: #C6C6C8;
+  --wg-color-success: #237A37;
+  --wg-color-success-soft: rgba(35, 122, 55, 0.1);
+  --wg-color-success-solid: #237A37;
+  --wg-color-warning: #9A5207;
+  --wg-color-warning-soft: rgba(154, 82, 7, 0.1);
+  --wg-color-warning-solid: #9A5207;
+  --wg-color-danger: #FF3B30;
+  --wg-color-danger-soft: rgba(255, 59, 48, 0.08);
+  --wg-color-danger-text: #D62E25;
+  --wg-color-danger-solid: #D62E25;
+  --wg-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --wg-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --wg-shadow-glow: none;
+  /* True iOS grouped look: cards are flat, only floating layers cast soft shade */
+  --wg-elev-1: none;
+  --wg-elev-2: 0 6px 20px rgba(0, 0, 0, 0.04);
+  --wg-elev-3: 0 16px 48px rgba(0, 0, 0, 0.1);
+  color-scheme: light;
+}
+
+/* Dark theme: pure-black canvas, elevated gray surfaces, bright accents. */
+[data-theme="dark"] {
+  --wg-color-accent: #0A84FF;
+  --wg-color-accent-strong: #0068D7;
+  --wg-color-accent-ink: #ffffff;
+  --wg-color-accent-text: #64D2FF;
+  --wg-color-accent-soft: rgba(10, 132, 255, 0.14);
+  --wg-color-accent-ghost: rgba(10, 132, 255, 0.07);
+  --wg-color-brand: #0A84FF;
+  --wg-color-focus: #0A84FF;
+  --wg-color-bg: #000000;
+  --wg-color-surface: #1C1C1E;
+  --wg-color-surface-2: #2C2C2E;
+  --wg-color-surface-3: #3A3A3C;
+  --wg-color-fill: #2C2C2E;
+  --wg-color-text: #FFFFFF;
+  --wg-color-text-2: rgba(235, 235, 245, 0.6);
+  --wg-color-text-3: rgba(235, 235, 245, 0.3);
+  --wg-color-border: rgba(84, 84, 88, 0.6);
+  --wg-color-border-strong: #48484A;
+  --wg-color-success: #30D158;
+  --wg-color-success-soft: rgba(48, 209, 88, 0.14);
+  --wg-color-success-solid: #248A3D;
+  --wg-color-warning: #FF9F0A;
+  --wg-color-warning-soft: rgba(255, 159, 10, 0.14);
+  --wg-color-warning-solid: #C93400;
+  --wg-color-danger: #FF453A;
+  --wg-color-danger-soft: rgba(255, 69, 58, 0.14);
+  --wg-color-danger-text: #FF6961;
+  --wg-color-danger-solid: #D62E25;
+  --wg-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --wg-shadow-md: 0 4px 14px rgba(0, 0, 0, 0.5);
+  --wg-shadow-glow: none;
+  /* Whisper-soft floating shadows on black canvas */
+  --wg-elev-1: none;
+  --wg-elev-2: 0 8px 24px rgba(0, 0, 0, 0.25);
+  --wg-elev-3: 0 16px 48px rgba(0, 0, 0, 0.35);
+  color-scheme: dark;
+}
+
+/* Theme-invariant tokens: spacing, radii, type, motion, layout. */
+:root {
+  --wg-space-1: 0.25rem;
+  --wg-space-2: 0.5rem;
+  --wg-space-3: 0.75rem;
+  --wg-space-4: 1rem;
+  --wg-space-5: 1.25rem;
+  --wg-space-6: 1.5rem;
+  --wg-space-8: 2rem;
+  --wg-radius-sm: 8px;
+  --wg-radius-md: 12px;
+  --wg-radius-lg: 18px;
+  --wg-radius-pill: 999px;
+  --wg-font-sans: "Vazirmatn", "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --wg-font-mono: "Vazirmatn", "Inter", ui-monospace, "Courier New", monospace;
+  /* Apple-like fluid type scale */
+  --wg-text-display: clamp(1.5rem, 4vw, 2.1rem);
+  --wg-text-title: 1.1rem;
+  --wg-text-headline: 0.95rem;
+  --wg-text-body: 0.85rem;
+  --wg-text-footnote: 0.75rem;
+  --wg-text-caption: 0.7rem;
+  --wg-text-xs: 0.75rem;
+  --wg-text-sm: 0.85rem;
+  --wg-text-md: 0.95rem;
+  --wg-leading-tight: 1.3;
+  --wg-leading-normal: 1.6;
+  --wg-material-blur: blur(20px) saturate(1.5);
+  --wg-motion-fast: 0.15s ease;
+  --wg-motion-md: 0.25s ease;
+  --wg-motion-spring: 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  /* Snappier wizard step enter — keeps content lively without delaying the nav bar */
+  --wg-motion-enter: 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  --wg-motion-press: 0.12s ease;
+  --wg-layout-max: 880px;
+  --wg-touch-min: 44px;
+}

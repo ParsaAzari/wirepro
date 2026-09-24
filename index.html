@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="title">WireGuard Converter</title>
+  <meta name="description" content="Convert WireGuard configurations to Clash, AmneziaWG, WG Tunnel, Wiresock formats with ease." />
+  <meta name="author" content="Parsa Azari" />
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles/tokens.css?v=6.5" />
+  <link rel="stylesheet" href="styles/base.css?v=6.5" />
+  <link rel="stylesheet" href="styles/components.css?v=6.5" />
+  <link rel="stylesheet" href="styles/wizard.css?v=6.5" />
+  <link rel="stylesheet" href="styles/theme-toggle.css?v=6.5" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- Entry 3 of the Auto Generate relay chain (see js/warp-direct.js):
+       loads the Corsfix SDK used as last-resort fallback. -->
+  <script src="https://unpkg.com/corsfix"></script>
+  <script type="module" src="./js/app.js"></script>
+</head>
+<body>
+  <div class="wg-page">
+    <!-- ===== Site chrome: brand + theme/language controls ===== -->
+    <header class="wg-topbar">
+      <div class="wg-brand">
+        <img class="wg-brand__logo" src="assets/logo.svg" alt="WirePro logo" />
+        <div>
+          <h1 class="wg-brand__title" data-i18n="main_title">WireGuard Converter</h1>
+          <p class="wg-brand__subtitle" data-i18n="subtitle">Convert your WireGuard configurations to different formats</p>
+        </div>
+      </div>
+      <div class="wg-topbar__actions">
+        <a class="wg-gh" href="https://github.com/ParsaAzari/wirepro" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg class="wg-gh__icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+          </svg>
+        </a>
+        <button type="button" id="wg-theme-toggle" class="wg-theme" aria-label="Toggle theme" aria-pressed="false">
+          <svg class="wg-theme__icon wg-theme__icon--moon" aria-hidden="true"><use href="assets/icons.svg#i-moon" /></svg>
+          <svg class="wg-theme__icon wg-theme__icon--sun" aria-hidden="true"><use href="assets/icons.svg#i-sun" /></svg>
+        </button>
+        <div class="wg-menu" id="wg-lang-menu">
+          <button type="button" class="wg-menu__button" id="wg-lang-button" aria-haspopup="listbox" aria-expanded="false">
+            <svg class="wg-icon"><use href="assets/icons.svg#i-globe" /></svg>
+            <span id="wg-lang-current">EN</span>
+          </button>
+          <div class="wg-menu__list" role="listbox" id="wg-lang-list">
+            <button type="button" class="wg-menu__item" role="option" data-lang="en"><svg class="wg-icon wg-menu__check" aria-hidden="true"><use href="assets/icons.svg#i-check" /></svg><span>English</span></button>
+            <button type="button" class="wg-menu__item" role="option" data-lang="tr"><svg class="wg-icon wg-menu__check" aria-hidden="true"><use href="assets/icons.svg#i-check" /></svg><span>Türkçe</span></button>
+            <button type="button" class="wg-menu__item" role="option" data-lang="fa"><svg class="wg-icon wg-menu__check" aria-hidden="true"><use href="assets/icons.svg#i-check" /></svg><span>فارسی</span></button>
+            <button type="button" class="wg-menu__item" role="option" data-lang="ru"><svg class="wg-icon wg-menu__check" aria-hidden="true"><use href="assets/icons.svg#i-check" /></svg><span>Русский</span></button>
+            <button type="button" class="wg-menu__item" role="option" data-lang="zh"><svg class="wg-icon wg-menu__check" aria-hidden="true"><use href="assets/icons.svg#i-check" /></svg><span>中文</span></button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== Page-control stepper (caption + clickable dots) ===== -->
+    <p class="wg-stepper__caption" id="wg-stepper-caption" aria-live="polite"></p>
+    <ol class="wg-stepper" id="wg-stepper" aria-label="Progress">
+      <li class="wg-stepper__item wg-stepper__item--active" data-step-link="1"><span class="wg-stepper__num">1</span><span class="wg-stepper__label" data-i18n="wizard_step_1">Input</span></li>
+      <li class="wg-stepper__item" data-step-link="2"><span class="wg-stepper__num">2</span><span class="wg-stepper__label" data-i18n="wizard_step_2">Format</span></li>
+      <li class="wg-stepper__item" data-step-link="3"><span class="wg-stepper__num">3</span><span class="wg-stepper__label" data-i18n="wizard_step_3">Settings</span></li>
+      <li class="wg-stepper__item" data-step-link="4"><span class="wg-stepper__num">4</span><span class="wg-stepper__label" data-i18n="wizard_step_4">Result</span></li>
+    </ol>
+
+    <!-- Wizard card: four mutually exclusive step sections -->
+    <main class="wg-card">
+      <!-- STEP 1 · INPUT -->
+      <section class="wg-step wg-step--active" id="wg-step-1" data-step="1" aria-labelledby="wg-step-1-title">
+        <p class="wg-card__hint" data-i18n="wizard_input_hint">Drop .conf files or paste content. Detected configs move you forward.</p>
+        <div class="wg-field">
+          <label class="wg-dropzone" id="wg-dropzone" for="wg-files">
+            <svg class="wg-icon"><use href="assets/icons.svg#i-file-up" /></svg>
+            <span id="wg-dropzone-text" data-i18n="select_files">Select files</span>
+          </label>
+          <input type="file" id="wg-files" class="wg-visually-hidden" accept=".conf" multiple />
+        </div>
+        <div class="wg-field">
+          <button type="button" class="wg-btn wg-btn--secondary" id="wg-auto-btn">
+            <svg class="wg-icon"><use href="assets/icons.svg#i-zap" /></svg>
+            <span data-i18n="auto_generate">Auto Generate</span>
+          </button>
+          <p class="wg-note" data-i18n="fresh_note">Each click registers a brand-new account — never shared.</p>
+          <!-- Relay chain is fixed in js/warp-direct.js (worker → corsproxy.dev → Corsfix SDK) — no user-facing proxy form. -->
+        </div>
+        <div class="wg-field">
+          <label class="wg-field__label wg-visually-hidden" for="wg-input-text">Config input</label>
+          <textarea id="wg-input-text" class="wg-textarea" data-i18n-placeholder="input_placeholder" placeholder="Or paste your .conf file content here..."></textarea>
+        </div>
+        <div class="wg-empty" id="wg-empty">
+          <svg class="wg-icon"><use href="assets/icons.svg#i-file-up" /></svg>
+          <div class="wg-empty__title" data-i18n="empty_title">No configs yet</div>
+          <div class="wg-empty__hint" data-i18n="empty_hint">Drop .conf files above or paste config text to begin.</div>
+        </div>
+        <div class="wg-detected" id="wg-detected" hidden>
+          <svg class="wg-icon"><use href="assets/icons.svg#i-check" /></svg>
+          <span><span data-i18n="detected_label">Detected configs</span>: <strong id="wg-detected-count">0</strong></span>
+        </div>
+        <div class="wg-validation" id="wg-validation" role="status" hidden></div>
+        <div class="wg-wizard__nav">
+          <button type="button" class="wg-btn wg-btn--ghost" id="wg-clear-btn"><span data-i18n="clear">Clear</span></button>
+          <button type="button" class="wg-btn wg-btn--primary" id="wg-next-1"><span data-i18n="wizard_next">Next</span><svg class="wg-icon wg-icon--dir"><use href="assets/icons.svg#i-arrow-right" /></svg></button>
+        </div>
+      </section>
+
+      <!-- STEP 2 · FORMAT -->
+      <section class="wg-step" id="wg-step-2" data-step="2" hidden>
+        <p class="wg-card__hint" data-i18n="wizard_format_hint">Choose one output format for all configs.</p>
+        <label class="wg-choice">
+          <input type="radio" name="wg-format" value="clash" class="wg-visually-hidden" />
+          <span class="wg-choice__radio" aria-hidden="true"></span>
+          <span class="wg-choice__body"><img src="assets/clash.webp" alt="" class="wg-choice__icon" /><span>Clash</span></span>
+        </label>
+        <label class="wg-choice">
+          <input type="radio" name="wg-format" value="awg" class="wg-visually-hidden" checked />
+          <span class="wg-choice__radio" aria-hidden="true"></span>
+          <span class="wg-choice__body">
+            <img src="assets/amnezia-wg.webp" alt="" class="wg-choice__icon" />
+            <img src="assets/wg-tunnel.webp" alt="" class="wg-choice__icon" />
+            <span>AmneziaWG / WG Tunnel</span>
+          </span>
+        </label>
+        <label class="wg-choice" style="margin-top:0.5rem">
+          <input type="radio" name="wg-format" value="wiresocket" class="wg-visually-hidden" />
+          <span class="wg-choice__radio" aria-hidden="true"></span>
+          <span class="wg-choice__body"><img src="assets/wiresock.webp" alt="" class="wg-choice__icon" /><span>Wiresock</span></span>
+        </label>
+        <div class="wg-wizard__nav">
+          <button type="button" class="wg-btn wg-btn--ghost" data-wg-back><svg class="wg-icon wg-icon--dir"><use href="assets/icons.svg#i-arrow-left" /></svg><span data-i18n="wizard_back">Back</span></button>
+          <button type="button" class="wg-btn wg-btn--primary" id="wg-next-2"><span data-i18n="wizard_next">Next</span><svg class="wg-icon wg-icon--dir"><use href="assets/icons.svg#i-arrow-right" /></svg></button>
+        </div>
+      </section>
+
+      <!-- STEP 3 · SETTINGS -->
+      <section class="wg-step" id="wg-step-3" data-step="3" hidden>
+        <p class="wg-card__hint" data-i18n="wizard_settings_hint">Tune junk packets and overrides. Defaults work for most users.</p>
+        <div id="wg-settings-amnezia">
+          <h3 class="wg-panel__title" data-i18n="junk_packet_settings">Junk Packet Settings</h3>
+          <label class="wg-choice">
+            <input type="checkbox" id="wg-amnezia15-enabled" class="wg-visually-hidden" />
+            <span class="wg-choice__check" aria-hidden="true"><svg class="wg-icon"><use href="assets/icons.svg#i-check" /></svg></span>
+            <span class="wg-choice__body" data-i18n="enable_15">Enable Amnezia 1.5 (I1-I5)</span>
+            <button type="button" class="wg-help" aria-expanded="false"><svg class="wg-icon"><use href="assets/icons.svg#i-help" /></svg></button>
+            <span class="wg-help__bubble" role="tooltip"><strong data-i18n="help_amnezia15_title"></strong><span data-i18n="help_amnezia15_body"></span></span>
+          </label>
+          <label class="wg-choice">
+            <input type="checkbox" id="wg-advanced-enabled" class="wg-visually-hidden" />
+            <span class="wg-choice__check" aria-hidden="true"><svg class="wg-icon"><use href="assets/icons.svg#i-check" /></svg></span>
+            <span class="wg-choice__body" data-i18n="enable_advanced">Enable Advanced Settings</span>
+            <button type="button" class="wg-help" aria-expanded="false"><svg class="wg-icon"><use href="assets/icons.svg#i-help" /></svg></button>
+            <span class="wg-help__bubble" role="tooltip"><strong data-i18n="help_advanced_title"></strong><span data-i18n="help_advanced_body"></span></span>
+          </label>
+          <div class="wg-segment">
+          <label class="wg-choice">
+            <input type="radio" name="wg-junk" id="wg-junk-light" value="light" class="wg-visually-hidden" checked />
+            <span class="wg-choice__radio" aria-hidden="true"></span>
+            <span class="wg-choice__body" data-i18n="light_option">Light (jc=3, jmin=1, jmax=3)</span>
+          </label>
+          <label class="wg-choice">
+            <input type="radio" name="wg-junk" id="wg-junk-heavy" value="heavy" class="wg-visually-hidden" />
+            <span class="wg-choice__radio" aria-hidden="true"></span>
+            <span class="wg-choice__body" data-i18n="heavy_option">Heavy (jc=5, jmin=10, jmax=40)</span>
+          </label>
+          <label class="wg-choice">
+            <input type="radio" name="wg-junk" id="wg-junk-custom" value="custom" class="wg-visually-hidden" />
+            <span class="wg-choice__radio" aria-hidden="true"></span>
+            <span class="wg-choice__body" data-i18n="custom_settings">Custom Settings</span>
+            <button type="button" class="wg-help" aria-expanded="false"><svg class="wg-icon"><use href="assets/icons.svg#i-help" /></svg></button>
+            <span class="wg-help__bubble" role="tooltip"><strong data-i18n="help_custom_title"></strong><span data-i18n="help_custom_body"></span></span>
+          </label>
+          </div>
+          <div class="wg-panel">
+            <div class="wg-junk-head">
+              <span class="wg-panel__title" data-i18n="custom_values">Custom values</span>
+              <button type="button" class="wg-help" aria-expanded="false"><svg class="wg-icon"><use href="assets/icons.svg#i-help" /></svg></button>
+              <span class="wg-help__bubble" role="tooltip"><strong data-i18n="help_junk_title"></strong><span data-i18n="help_junk_body"></span></span>
+            </div>
+            <div class="wg-row"><span class="wg-row__label" data-i18n="junk_count_label">Junk count (jc)</span><div class="wg-num"><button type="button" class="wg-num__btn" data-target="wg-jc" data-limit="jc" data-dir="-1" data-i18n-aria-label="stepper_dec" aria-label="Decrease">−</button><input id="wg-jc" class="wg-input" inputmode="numeric" maxlength="3" placeholder="128" /><button type="button" class="wg-num__btn" data-target="wg-jc" data-limit="jc" data-dir="1" data-i18n-aria-label="stepper_inc" aria-label="Increase">+</button></div></div>
+            <div class="wg-row"><span class="wg-row__label" data-i18n="junk_min_label">Min size (jmin)</span><div class="wg-num"><button type="button" class="wg-num__btn" data-target="wg-jmin" data-limit="jmin" data-dir="-1" data-i18n-aria-label="stepper_dec" aria-label="Decrease">−</button><input id="wg-jmin" class="wg-input" inputmode="numeric" maxlength="4" placeholder="1279" /><button type="button" class="wg-num__btn" data-target="wg-jmin" data-limit="jmin" data-dir="1" data-i18n-aria-label="stepper_inc" aria-label="Increase">+</button></div></div>
+            <div class="wg-row"><span class="wg-row__label" data-i18n="junk_max_label">Max size (jmax)</span><div class="wg-num"><button type="button" class="wg-num__btn" data-target="wg-jmax" data-limit="jmax" data-dir="-1" data-i18n-aria-label="stepper_dec" aria-label="Decrease">−</button><input id="wg-jmax" class="wg-input" inputmode="numeric" maxlength="4" placeholder="1280" /><button type="button" class="wg-num__btn" data-target="wg-jmax" data-limit="jmax" data-dir="1" data-i18n-aria-label="stepper_inc" aria-label="Increase">+</button></div></div>
+            <div class="wg-inline-actions">
+              <button type="button" class="wg-btn wg-btn--secondary wg-btn--sm" id="wg-junk-random"><span data-i18n="generate_random">Generate Random</span></button>
+              <button type="button" class="wg-btn wg-btn--ghost wg-btn--sm" id="wg-junk-reset">Reset</button>
+            </div>
+            <label class="wg-choice" style="margin-top:0.75rem;margin-bottom:0">
+              <input type="checkbox" id="wg-random-per-config" class="wg-visually-hidden" />
+              <span class="wg-choice__check" aria-hidden="true"><svg class="wg-icon"><use href="assets/icons.svg#i-check" /></svg></span>
+              <span class="wg-choice__body" data-i18n="randomizePerConfig">Randomize per Config</span>
+            </label>
+          </div>
+          <div class="wg-panel" id="wg-amnezia15-panel" hidden>
+            <h3 class="wg-panel__title" data-i18n="amnezia_params">Amnezia 1.5 Parameters</h3>
+            <div class="wg-row"><span class="wg-row__label">I1 =</span><input id="wg-i1" class="wg-input" placeholder="I1" /></div>
+            <div class="wg-row"><span class="wg-row__label">I2 =</span><input id="wg-i2" class="wg-input" placeholder="I2" /></div>
+            <div class="wg-row"><span class="wg-row__label">I3 =</span><input id="wg-i3" class="wg-input" placeholder="I3" /></div>
+            <div class="wg-row"><span class="wg-row__label">I4 =</span><input id="wg-i4" class="wg-input" placeholder="I4" /></div>
+            <div class="wg-row"><span class="wg-row__label">I5 =</span><input id="wg-i5" class="wg-input" placeholder="I5" /></div>
+            <p class="wg-note"><span data-i18n="amnezia15_note_prefix"></span><a href="https://docs.amnezia.org/documentation/instructions/new-amneziawg-selfhosted/" target="_blank" rel="noopener" data-i18n="amnezia15_official_docs"></a><span data-i18n="amnezia15_note_suffix"></span></p>
+          </div>
+          <div class="wg-panel" id="wg-advanced-panel" hidden>
+            <h3 class="wg-panel__title" data-i18n="advanced_params">Advanced Parameters</h3>
+            <div class="wg-row"><span class="wg-row__label">ContentPaddingAddition =</span><input id="wg-adv-padding" class="wg-input" placeholder="0-128" /></div>
+            <div class="wg-row"><span class="wg-row__label">RekeyAfterTime =</span><input id="wg-adv-rekey-after" class="wg-input" placeholder="90-150" /></div>
+            <div class="wg-row"><span class="wg-row__label">RekeyTimeout =</span><input id="wg-adv-rekey-timeout" class="wg-input" placeholder="3-10" /></div>
+            <div class="wg-row"><span class="wg-row__label">RejectAfterTime =</span><input id="wg-adv-reject-after" class="wg-input" placeholder="150-210" /></div>
+            <div class="wg-row"><span class="wg-row__label">KeepaliveTimeout =</span><input id="wg-adv-keepalive" class="wg-input" placeholder="5-15" /></div>
+            <div class="wg-row"><span class="wg-row__label">MaxHandshakeAttempts =</span><input id="wg-adv-handshake" class="wg-input" placeholder="5-18" /></div>
+            <div class="wg-row"><span class="wg-row__label">PersistentKeepalive =</span><input id="wg-adv-persistent" class="wg-input" inputmode="numeric" maxlength="5" placeholder="25" /></div>
+            <label class="wg-choice">
+              <input type="checkbox" id="wg-adv-cookies" class="wg-visually-hidden" />
+              <span class="wg-choice__check" aria-hidden="true"><svg class="wg-icon"><use href="assets/icons.svg#i-check" /></svg></span>
+              <span class="wg-choice__body" data-i18n="disable_cookies">DisableCookies</span>
+            </label>
+            <div class="wg-inline-actions">
+              <button type="button" class="wg-btn wg-btn--secondary wg-btn--sm" id="wg-adv-random"><span data-i18n="generate_random">Generate Random</span></button>
+              <button type="button" class="wg-btn wg-btn--ghost wg-btn--sm" id="wg-adv-reset"><span data-i18n="reset_advanced">Reset Advanced</span></button>
+            </div>
+            <h3 class="wg-panel__title" style="margin-top:1rem" data-i18n="dns_settings">DNS Settings</h3>
+            <label class="wg-choice">
+              <input type="checkbox" id="wg-dns-enabled" class="wg-visually-hidden" />
+              <span class="wg-choice__check" aria-hidden="true"><svg class="wg-icon"><use href="assets/icons.svg#i-check" /></svg></span>
+              <span class="wg-choice__body" data-i18n="enable_custom_dns">Override DNS Settings</span>
+            </label>
+            <div id="wg-dns-panel" hidden>
+              <div class="wg-row"><span class="wg-row__label" data-i18n="dns_provider">DNS Provider:</span>
+                <select id="wg-dns-provider" class="wg-select">
+                  <option value="google">Google (8.8.8.8, 8.8.4.4)</option>
+                  <option value="cloudflare">Cloudflare (1.1.1.1, 1.0.0.1)</option>
+                  <option value="quad9">Quad9 (9.9.9.9, 149.112.112.112)</option>
+                  <option value="opendns">OpenDNS (208.67.222.222, 208.67.220.220)</option>
+                  <option value="adguard">AdGuard (94.140.14.14, 94.140.15.15)</option>
+                  <option value="nextdns">NextDNS (45.90.28.0, 45.90.30.0)</option>
+                  <option value="custom" data-i18n="custom_dns_option">Custom DNS</option>
+                </select>
+              </div>
+              <div class="wg-row" id="wg-dns-custom-row" hidden><span class="wg-row__label" data-i18n="dns_label">DNS:</span><input id="wg-dns-custom" class="wg-input" placeholder="8.8.8.8, 1.1.1.1" /></div>
+            </div>
+            <h3 class="wg-panel__title" style="margin-top:1rem" data-i18n="mtu_settings">MTU Settings</h3>
+            <label class="wg-choice">
+              <input type="checkbox" id="wg-mtu-enabled" class="wg-visually-hidden" />
+              <span class="wg-choice__check" aria-hidden="true"><svg class="wg-icon"><use href="assets/icons.svg#i-check" /></svg></span>
+              <span class="wg-choice__body" data-i18n="enable_custom_mtu">Override MTU Value</span>
+            </label>
+            <div id="wg-mtu-panel" hidden>
+              <div class="wg-row"><span class="wg-row__label">MTU =</span><input id="wg-mtu" class="wg-input wg-input--short" maxlength="4" placeholder="1420" /></div>
+              <p class="wg-note" data-i18n="mtu_hint">Default: 1420. Typical range: 1280-1500</p>
+            </div>
+          </div>
+        </div>
+        <div id="wg-settings-wiresock" hidden>
+          <h3 class="wg-panel__title" data-i18n="wiresock_params">Wiresock Parameters</h3>
+          <div class="wg-segment">
+          <label class="wg-choice">
+            <input type="radio" name="wg-ws-junk" value="light" class="wg-visually-hidden" checked />
+            <span class="wg-choice__radio" aria-hidden="true"></span>
+            <span class="wg-choice__body" data-i18n="light_option">Light</span>
+          </label>
+          <label class="wg-choice">
+            <input type="radio" name="wg-ws-junk" value="heavy" class="wg-visually-hidden" />
+            <span class="wg-choice__radio" aria-hidden="true"></span>
+            <span class="wg-choice__body" data-i18n="heavy_option">Heavy</span>
+          </label>
+          <label class="wg-choice">
+            <input type="radio" name="wg-ws-junk" value="custom" class="wg-visually-hidden" />
+            <span class="wg-choice__radio" aria-hidden="true"></span>
+            <span class="wg-choice__body" data-i18n="custom_settings">Custom Settings</span>
+            <button type="button" class="wg-help" aria-expanded="false"><svg class="wg-icon"><use href="assets/icons.svg#i-help" /></svg></button>
+            <span class="wg-help__bubble" role="tooltip"><strong data-i18n="help_custom_title"></strong><span data-i18n="help_custom_body"></span></span>
+          </label>
+          </div>
+          <div class="wg-panel">
+            <div class="wg-junk-head">
+              <span class="wg-panel__title" data-i18n="custom_values">Custom values</span>
+              <button type="button" class="wg-help" aria-expanded="false"><svg class="wg-icon"><use href="assets/icons.svg#i-help" /></svg></button>
+              <span class="wg-help__bubble" role="tooltip"><strong data-i18n="help_junk_title"></strong><span data-i18n="help_junk_body"></span></span>
+            </div>
+            <div class="wg-row"><span class="wg-row__label" data-i18n="junk_count_label">Junk count (jc)</span><div class="wg-num"><button type="button" class="wg-num__btn" data-target="wg-ws-jc" data-limit="jc" data-dir="-1" data-i18n-aria-label="stepper_dec" aria-label="Decrease">−</button><input id="wg-ws-jc" class="wg-input" maxlength="3" placeholder="128" /><button type="button" class="wg-num__btn" data-target="wg-ws-jc" data-limit="jc" data-dir="1" data-i18n-aria-label="stepper_inc" aria-label="Increase">+</button></div></div>
+            <div class="wg-row"><span class="wg-row__label" data-i18n="junk_min_label">Min size (jmin)</span><div class="wg-num"><button type="button" class="wg-num__btn" data-target="wg-ws-jmin" data-limit="jmin" data-dir="-1" data-i18n-aria-label="stepper_dec" aria-label="Decrease">−</button><input id="wg-ws-jmin" class="wg-input" maxlength="4" placeholder="1279" /><button type="button" class="wg-num__btn" data-target="wg-ws-jmin" data-limit="jmin" data-dir="1" data-i18n-aria-label="stepper_inc" aria-label="Increase">+</button></div></div>
+            <div class="wg-row"><span class="wg-row__label" data-i18n="junk_max_label">Max size (jmax)</span><div class="wg-num"><button type="button" class="wg-num__btn" data-target="wg-ws-jmax" data-limit="jmax" data-dir="-1" data-i18n-aria-label="stepper_dec" aria-label="Decrease">−</button><input id="wg-ws-jmax" class="wg-input" maxlength="4" placeholder="1280" /><button type="button" class="wg-num__btn" data-target="wg-ws-jmax" data-limit="jmax" data-dir="1" data-i18n-aria-label="stepper_inc" aria-label="Increase">+</button></div></div>
+            <div class="wg-row"><span class="wg-row__label">Id =</span><input id="wg-ws-id" class="wg-input" placeholder="Domain for masking" /></div>
+            <div class="wg-row"><span class="wg-row__label">Ip =</span>
+              <select id="wg-ws-ip" class="wg-select"><option value="QUIC">QUIC</option><option value="DNS">DNS</option></select>
+            </div>
+            <div class="wg-row"><span class="wg-row__label">Ib =</span>
+              <select id="wg-ws-ib" class="wg-select"><option value="Chrome">Chrome</option><option value="Firefox">Firefox</option><option value="cURL">cURL</option></select>
+            </div>
+            <div class="wg-inline-actions">
+              <button type="button" class="wg-btn wg-btn--secondary wg-btn--sm" id="wg-ws-random"><span data-i18n="generate_random">Generate Random</span></button>
+            </div>
+          </div>
+        </div>
+        <div class="wg-wizard__nav">
+          <button type="button" class="wg-btn wg-btn--ghost" data-wg-back><svg class="wg-icon wg-icon--dir"><use href="assets/icons.svg#i-arrow-left" /></svg><span data-i18n="wizard_back">Back</span></button>
+          <button type="button" class="wg-btn wg-btn--primary" id="wg-convert-btn"><svg class="wg-icon"><use href="assets/icons.svg#i-zap" /></svg><span data-i18n="wizard_convert">Convert</span></button>
+        </div>
+      </section>
+
+      <!-- STEP 4 · RESULT -->
+      <section class="wg-step" id="wg-step-4" data-step="4" hidden>
+        <p class="wg-card__hint" data-i18n="wizard_result_hint">Review each config, then copy or download.</p>
+        <div class="wg-result-summary" id="wg-result-summary" hidden>
+          <span class="wg-result-summary__icon"><svg class="wg-icon"><use href="assets/icons.svg#i-ok-fill" /></svg></span>
+          <span class="wg-result-summary__text">
+            <strong id="wg-result-summary-title"></strong>
+            <small id="wg-result-summary-sub"></small>
+          </span>
+          <button type="button" class="wg-btn wg-btn--secondary wg-btn--sm" id="wg-download-zip" hidden><svg class="wg-icon"><use href="assets/icons.svg#i-download" /></svg><span data-i18n="download_all">Download all (ZIP)</span></button>
+        </div>
+        <div id="wg-results" hidden></div>
+        <div class="wg-wizard__nav">
+          <button type="button" class="wg-btn wg-btn--ghost" data-wg-back><svg class="wg-icon wg-icon--dir"><use href="assets/icons.svg#i-arrow-left" /></svg><span data-i18n="wizard_back">Back</span></button>
+          <button type="button" class="wg-btn wg-btn--primary" id="wg-again-btn"><span data-i18n="wizard_restart">Start over</span></button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Floating install-guide entry (shown only on step 4 by ui.js) -->
+    <button type="button" class="wg-fab" id="wg-install-fab" hidden>
+      <svg class="wg-icon" aria-hidden="true"><use href="assets/icons.svg#i-download" /></svg>
+      <span data-i18n="install_guide">Install guide</span>
+    </button>
+
+    <p class="wg-meta" id="wg-file-meta" data-i18n="no_files">No files selected</p>
+  </div>
+
+  <!-- ===== Dialogs (hidden shells; opened by ui.js / app.js) ===== -->
+
+  <!-- First-visit language picker (shown once when no stored language) -->
+  <div class="wg-modal wg-modal--welcome" id="wg-lang-modal" hidden>
+    <div class="wg-modal__box" role="dialog" aria-modal="true" aria-labelledby="wg-lang-welcome-title">
+      <div class="wg-modal__header">
+        <h2 class="wg-modal__title" id="wg-lang-welcome-title" data-i18n="lang_welcome_title">Choose your language</h2>
+      </div>
+      <p class="wg-modal__subtitle" data-i18n="lang_welcome_hint">Pick a language to continue.</p>
+      <div class="wg-install-list" id="wg-lang-welcome-list">
+        <button type="button" class="wg-install-os wg-lang-pick" data-lang-pick="en"><span class="wg-lang-pick__name">English</span></button>
+        <button type="button" class="wg-install-os wg-lang-pick" data-lang-pick="tr"><span class="wg-lang-pick__name">Türkçe</span></button>
+        <button type="button" class="wg-install-os wg-lang-pick" data-lang-pick="fa"><span class="wg-lang-pick__name">فارسی</span></button>
+        <button type="button" class="wg-install-os wg-lang-pick" data-lang-pick="ru"><span class="wg-lang-pick__name">Русский</span></button>
+        <button type="button" class="wg-install-os wg-lang-pick" data-lang-pick="zh"><span class="wg-lang-pick__name">中文</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR code viewer for mobile clients -->
+  <div class="wg-modal" id="wg-qr-modal" hidden>
+    <div class="wg-modal__box" role="dialog" aria-modal="true" aria-labelledby="wg-qr-title">
+      <div class="wg-modal__header">
+        <h2 class="wg-modal__title" id="wg-qr-title" data-i18n="qr_code">QR Code</h2>
+        <button type="button" class="wg-modal__close" id="wg-qr-close" aria-label="Close"><svg class="wg-icon"><use href="assets/icons.svg#i-x" /></svg></button>
+      </div>
+      <div class="wg-qrbox" id="wg-qr-box"></div>
+      <p class="wg-note" style="text-align:center;margin-top:0.75rem" data-i18n="qr_note">QR codes work best for AmneziaWG and WG Tunnel mobile clients.</p>
+    </div>
+  </div>
+
+  <!-- Full validation details (JS-rendered per-config groups) -->
+  <div class="wg-modal" id="wg-val-modal" hidden>
+    <div class="wg-modal__box wg-modal__box--wide" role="dialog" aria-modal="true" aria-labelledby="wg-val-title">
+      <div class="wg-modal__header">
+        <h2 class="wg-modal__title" id="wg-val-title">Details</h2>
+        <button type="button" class="wg-modal__close" id="wg-val-close" aria-label="Close"><svg class="wg-icon"><use href="assets/icons.svg#i-x" /></svg></button>
+      </div>
+      <div id="wg-val-groups" class="wg-val-groups"></div>
+    </div>
+  </div>
+
+  <!-- Install guide: pick OS, then official client download links -->
+  <div class="wg-modal" id="wg-install-modal" hidden>
+    <div class="wg-modal__box" role="dialog" aria-modal="true" aria-labelledby="wg-install-title">
+      <div class="wg-modal__header">
+        <h2 class="wg-modal__title" id="wg-install-title" data-i18n="install_title">Install guide</h2>
+        <button type="button" class="wg-modal__close" id="wg-install-close" aria-label="Close"><svg class="wg-icon"><use href="assets/icons.svg#i-x" /></svg></button>
+      </div>
+      <p class="wg-modal__subtitle" id="wg-install-sub" data-i18n="install_pick_os">Choose your operating system</p>
+      <div class="wg-install-list" id="wg-install-list"></div>
+    </div>
+  </div>
+
+  <!-- Result config editor (LTR textarea regardless of UI direction) -->
+  <div class="wg-modal" id="wg-edit-modal" hidden>
+    <div class="wg-modal__box wg-modal__box--wide" role="dialog" aria-modal="true" aria-labelledby="wg-edit-title">
+      <div class="wg-modal__header">
+        <h2 class="wg-modal__title" id="wg-edit-title">Edit</h2>
+        <button type="button" class="wg-modal__close" id="wg-edit-close" aria-label="Close"><svg class="wg-icon"><use href="assets/icons.svg#i-x" /></svg></button>
+      </div>
+      <textarea id="wg-edit-text" class="wg-textarea wg-edit-text" spellcheck="false"></textarea>
+      <div class="wg-inline-actions">
+        <button type="button" class="wg-btn wg-btn--primary wg-btn--sm" id="wg-edit-save"><svg class="wg-icon"><use href="assets/icons.svg#i-check" /></svg><span data-i18n="save">Save</span></button>
+        <button type="button" class="wg-btn wg-btn--secondary wg-btn--sm" id="wg-edit-copy"><svg class="wg-icon"><use href="assets/icons.svg#i-copy" /></svg><span data-i18n="copy">Copy</span></button>
+        <button type="button" class="wg-btn wg-btn--ghost wg-btn--sm" id="wg-edit-cancel"><span data-i18n="close">Close</span></button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

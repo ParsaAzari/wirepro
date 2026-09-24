@@ -1,0 +1,68 @@
+/* Base reset + typography. No component styles here. */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  background: var(--wg-color-bg);
+  color: var(--wg-color-text);
+  font-family: var(--wg-font-sans);
+  line-height: 1.55;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background var(--wg-motion-md), color var(--wg-motion-md);
+}
+
+body.wg-lang-fa, body.wg-lang-zh { font-family: var(--wg-font-sans); }
+
+button, input, select, textarea { font: inherit; color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--wg-color-focus);
+  outline-offset: 2px;
+}
+
+::selection { background: var(--wg-color-accent-soft); }
+
+.wg-icon {
+  width: 1.05em;
+  height: 1.05em;
+  flex-shrink: 0;
+  vertical-align: -0.15em;
+}
+
+/* Directional icons mirror in RTL so back/next point the right way */
+[dir="rtl"] .wg-icon--dir { transform: scaleX(-1); }
+
+/* Mirrored step transitions in RTL (forward pushes from the other side) */
+[dir="rtl"] .wg-step--active > *:not(.wg-wizard__nav) { animation-name: wg-step-in-back; }
+[dir="rtl"] .wg-step--back > *:not(.wg-wizard__nav) { animation-name: wg-step-in; }
+[dir="rtl"] .wg-skeleton::after { animation-direction: reverse; }
+
+/* Apple-like overlay scrollbars: slim, rounded, transparent track */
+* { scrollbar-width: thin; scrollbar-color: var(--wg-color-text-3) transparent; }
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--wg-color-text-3);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--wg-color-text-2); border: 2px solid transparent; background-clip: padding-box; }
+*::-webkit-scrollbar-corner { background: transparent; }
+
+.wg-visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001s !important;
+    transition-duration: 0.001s !important;
+  }
+}

@@ -1,0 +1,110 @@
+/* Wizard stepper as an Apple page control: caption + dots. */
+
+.wg-stepper__caption {
+  text-align: center;
+  font-size: var(--wg-text-footnote);
+  font-weight: 600;
+  color: var(--wg-color-text-2);
+  margin-bottom: var(--wg-space-2);
+}
+
+.wg-stepper {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: var(--wg-space-5);
+  padding: 0;
+}
+
+.wg-stepper__item {
+  background: none;
+  border: none;
+  padding: 10px 6px;
+  cursor: default;
+  line-height: 0;
+}
+
+.wg-stepper__item--clickable { cursor: pointer; }
+
+.wg-stepper__num {
+  display: block;
+  width: 8px; height: 8px;
+  border-radius: 999px;
+  background: var(--wg-color-text-3);
+  opacity: 0.55;
+  font-size: 0;
+  color: transparent;
+  overflow: hidden;
+  transition: width var(--wg-motion-spring), background var(--wg-motion-fast), opacity var(--wg-motion-fast);
+}
+
+.wg-stepper__label { display: none; }
+
+/* Dot states: active grows into a brand pill, done turns success green. */
+.wg-stepper__item--active .wg-stepper__num {
+  width: 26px;
+  background: var(--wg-color-brand);
+  opacity: 1;
+}
+
+.wg-stepper__item--done .wg-stepper__num { background: var(--wg-color-success); opacity: 0.85; }
+.wg-stepper__item--clickable:hover .wg-stepper__num { opacity: 1; }
+
+/* Step panels: only the active one renders.
+   Animate body children only — the nav must never inherit transform/opacity
+   (transform would break position:fixed; opacity delays the mobile bar). */
+.wg-step { display: none; }
+.wg-step--active { display: block; }
+.wg-step--active > *:not(.wg-wizard__nav) {
+  animation: wg-step-in var(--wg-motion-enter);
+}
+.wg-step--back > *:not(.wg-wizard__nav) {
+  animation-name: wg-step-in-back;
+}
+/* Nav appears immediately with a snappy fade — no translate, no spring delay */
+.wg-step--active .wg-wizard__nav {
+  animation: wg-nav-in var(--wg-motion-fast);
+}
+
+@keyframes wg-step-in {
+  from { opacity: 0; transform: translateX(14px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes wg-step-in-back {
+  from { opacity: 0; transform: translateX(-14px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes wg-nav-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Back / Next / Start-over row (stacks to one column on phones). */
+.wg-wizard__nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--wg-space-3);
+  margin-top: var(--wg-space-5);
+}
+
+/* "N configs detected" chip under the textarea (accent pill). */
+.wg-detected {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--wg-space-2);
+  font-size: var(--wg-text-footnote);
+  font-weight: 600;
+  color: var(--wg-color-accent-text);
+  background: var(--wg-color-accent-soft);
+  border: none;
+  border-radius: var(--wg-radius-pill);
+  padding: 0.35rem 0.85rem;
+  margin-bottom: var(--wg-space-3);
+}
+
+/* Phone: nav buttons go full-width, stacked. */
+@media (max-width: 640px) {
+  .wg-wizard__nav { grid-template-columns: 1fr; }
+}
